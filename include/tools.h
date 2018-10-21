@@ -11,6 +11,8 @@ namespace kkmeans_tools
 	typedef matrix<double, 2, 1> sample_type;
 
 	void FillDataFromInputStream(std::vector<sample_type>& matrix);
-	void GenerateData(std::vector<sample_type>& samples);
-	void GenerateData(int maxVal, int minVal, int count, std::vector<sample_type>& matrix);
+	void GenerateData(std::vector<sample_type>& samples, bool save = false);
+	void GenerateStarrySky(int minVal, int maxVal, int count, std::vector<sample_type>& matrix, bool save = false);
+	void Save_to_file(std::vector<sample_type>& matrix, std::string fileName);
+
 }

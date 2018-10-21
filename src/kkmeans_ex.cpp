@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 		cout << "Error: There is no clasters number. Please, input clasters number." << endl;
 		return 0;
 	}
-
+	
 	// Clusters number
 	long clustersNumbers = atol(argv[1]);
 		
@@ -42,6 +42,18 @@ int main(int argc, char *argv[])
 	{
 		cout << "Error: Parameter is invalide. Please, input clasters number." << endl;
 		return 0;
+	}
+	
+	bool saveData = false;
+	bool saveStarry_sky = false;
+
+	for (int i = 2; i < argc; ++i)
+	{
+		if ( !strcmp(argv[i],"-g"))
+			saveData = true;
+
+		if ( !strcmp(argv[i], "-s"))
+			saveStarry_sky = true;
 	}
 
 	// Here we declare that our samples will be 2 dimensional column vectors.  
@@ -72,15 +84,23 @@ int main(int argc, char *argv[])
 
 	std::vector<sample_type> samples;
 	std::vector<sample_type> samples_starry_sky;
+	std::vector<sample_type> samples_data;
 
 	std::vector<sample_type> initial_centers;
 
+	// Genarate data like in sample
+	if (saveData)
+		kkmeans_tools::GenerateData(samples_data, true);
+
+	// Generate data for task - StarrySky
+	if (saveStarry_sky)
+		kkmeans_tools::GenerateStarrySky(-100, 100, 200, samples_starry_sky, true);
+		
 	// Read data from file
 	kkmeans_tools::FillDataFromInputStream(samples);
-		
+
 	// tell the kkmeans object we made that we want to run k-means with k set to 3. 
-	// (i.e. we want 3 clusters)
-	test.set_number_of_centers(3);
+	test.set_number_of_centers(clustersNumbers);
 
 	// You need to pick some initial centers for the k-means algorithm.  So here
 	// we will use the dlib::pick_initial_centers() function which tries to find
@@ -101,29 +121,9 @@ int main(int argc, char *argv[])
 
 		for (unsigned long i = 0; i < samples.size(); ++i)
 		{
-			/*cout << test(samples[i]) << " ";
-			cout << test(samples[i + num]) << " ";
-			cout << test(samples[i + 2 * num]) << "\n";*/
-
-			out << samples[i](0) << " ";
-			out << samples[i](1) << " ";
+			out << samples[i](0) << ";";
+			out << samples[i](1) << ";";
 			out << test(samples[i]) << "\n";
 		}
-
 	}
-	// Now print out how many dictionary vectors each center used.  Note that 
-	// the maximum number of 8 was reached.  If you went back to the kcentroid 
-	// constructor and changed the 8 to some bigger number you would see that these
-	// numbers would go up.  However, 8 is all we need to correctly cluster this dataset.
-	cout << "num dictionary vectors for center 0: " << test.get_kcentroid(0).dictionary_size() << endl;
-	cout << "num dictionary vectors for center 1: " << test.get_kcentroid(1).dictionary_size() << endl;
-	cout << "num dictionary vectors for center 2: " << test.get_kcentroid(2).dictionary_size() << endl;
-
-
-	// Finally, we can also solve the same kind of non-linear clustering problem with
-	// spectral_cluster().  The output is a vector that indicates which cluster each sample
-	// belongs to.  Just like with kkmeans, it assigns each point to the correct cluster.
-	std::vector<unsigned long> assignments = spectral_cluster(kernel_type(0.1), samples, 3);
-	cout << mat(assignments) << endl;
-
 }
