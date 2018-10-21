@@ -129,9 +129,15 @@ int main(int argc, char *argv[])
 
 		for (unsigned long i = 0; i < samples.size(); ++i)
 		{
+			// to file
 			out << samples[i](0) << ";";
 			out << samples[i](1) << ";";
 			out << test(samples[i]) << "\n";
+			
+			// to consol
+			cout << samples[i](0) << ";";
+			cout << samples[i](1) << ";";
+			cout << test(samples[i]) << "\n";
 		}
 	}
 }
