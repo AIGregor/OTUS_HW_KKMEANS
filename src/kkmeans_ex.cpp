@@ -105,7 +105,11 @@ int main(int argc, char *argv[])
 		kkmeans_tools::GenerateStarrySky(-100, 100, 200, samples_starry_sky, true);
 		
 	// Read data from file
-	kkmeans_tools::FillDataFromInputStream(samples);
+	
+	if (clustersNumbers != 0)
+		kkmeans_tools::FillDataFromInputStream(samples);
+	else
+		return 0;
 
 	// tell the kkmeans object we made that we want to run k-means with k set to 3. 
 	test.set_number_of_centers(clustersNumbers);
@@ -113,7 +117,7 @@ int main(int argc, char *argv[])
 	// You need to pick some initial centers for the k-means algorithm.  So here
 	// we will use the dlib::pick_initial_centers() function which tries to find
 	// n points that are far apart (basically).  
-	pick_initial_centers(3, initial_centers, samples, test.get_kernel());
+	pick_initial_centers(clustersNumbers, initial_centers, samples, test.get_kernel());
 
 	// now run the k-means algorithm on our set of samples.  
 	test.train(samples, initial_centers);
