@@ -34,26 +34,34 @@ int main(int argc, char *argv[])
 		cout << "Error: There is no clasters number. Please, input clasters number." << endl;
 		return 0;
 	}
-	
-	// Clusters number
-	long clustersNumbers = atol(argv[1]);
-		
-	if (clustersNumbers == 0)
-	{
-		cout << "Error: Parameter is invalide. Please, input clasters number." << endl;
-		return 0;
-	}
-	
+			
 	bool saveData = false;
 	bool saveStarry_sky = false;
 
-	for (int i = 2; i < argc; ++i)
-	{
-		if ( !strcmp(argv[i],"-g"))
-			saveData = true;
+	// Clusters number
+	long clustersNumbers = 0;
 
-		if ( !strcmp(argv[i], "-s"))
+	for (int i = 1; i < argc; ++i)
+	{
+		if (!strcmp(argv[i], "-g"))
+		{
+			saveData = true;
+			continue;
+		}		
+
+		if (!strcmp(argv[i], "-s"))
+		{
 			saveStarry_sky = true;
+			continue;
+		}	
+
+		clustersNumbers = atol(argv[i]);
+	}
+
+	if (clustersNumbers == 0 && !saveStarry_sky && !saveData)
+	{
+		cout << "Error: Parameter is invalide. Please, input clasters number or other parameters." << endl;
+		return 0;
 	}
 
 	// Here we declare that our samples will be 2 dimensional column vectors.  
